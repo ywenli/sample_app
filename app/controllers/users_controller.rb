@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   # 直前にlogged_in_userメソッドを実行　edit, updateにのみ適用
   before_action :logged_in_user, only: [:edit, :update]
+  before_action :correct_user, only: [:edit, :update]
   
   def show
     # User.find(1) と同じ
@@ -23,11 +24,9 @@ class UsersController < ApplicationController
   end
   
   def edit
-    @user = User.find(params[:id])
   end
   
   def update
-    @user = User.find(params[:id])
     # 指定された属性の検証が全て成功した場合@userの更新と保存を続けて同時に行う
     if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
@@ -38,6 +37,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # 外部に公開されないメソッド 
   private
   
     def user_params
@@ -52,5 +52,12 @@ class UsersController < ApplicationController
         flash[:danger] = "Please log in."
         redirect_to login_url
       end
+    end
+      
+    # 正しいユーザーかどうか確認
+    def correct_user
+      @user = User.find(params[:id])
+      # root_url にリダイレクト　以下の式がfalse の場合　@user とcurrent_userが等しい
+      redirect_to(root_url) unless @user == current_user
     end
 end

@@ -4,3 +4,8 @@ michael:
   # テスト用のfixtureでは全員同じパスワード「password」を使う
   # (これはfixtureでよく使われる手法です)。
   password_digest: <%= User.digest('password') %>
+  
+archer:
+  name: Sterling Archer
+  email: duchess@example.gov
+  password_digest: <%= User.digest('password') %>
