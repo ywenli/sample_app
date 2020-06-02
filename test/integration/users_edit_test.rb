@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class UsersEditTest < ActionDispatch::IntegrationTest
-  
+
   def setup
     @user = users(:michael)
   end
@@ -14,17 +14,21 @@ class UsersEditTest < ActionDispatch::IntegrationTest
       email: "foo@invalid",
       password: "foo",
       password_confirmation: "bar" } }
-    
+
     assert_template 'users/edit'
     # 特定のHTMLタグが存在する
     # class="alert"のdiv, 4個のエラーがある
     assert_select "div.alert", "The form contains 4 errors."
   end
-  
-  test "successful edit" do
-    log_in_as(@user)
+
+  test "successful edit with friendly forwarding" do
     get edit_user_path(@user)
-    assert_template 'users/edit'
+    # session[:forwarding_url]とedit_user_url(@user)が等しい時にtrue
+    assert_equal session[:forwarding_url], edit_user_url(@user)
+    log_in_as(@user)
+    # session[:forwarding_url]がnilのときtrue
+    assert_nil session[:forwariding_url]
+    assert_redirected_to edit_user_url(@user)
     name = "Foo Bar"
     email = "foo@bar.com"
     patch user_path(@user), params: { user: {name: name,
