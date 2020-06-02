@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  # 直前にlogged_in_userメソッドを実行　edit, updateにのみ適用
+  before_action :logged_in_user, only: [:edit, :update]
+  
   def show
     # User.find(1) と同じ
     @user = User.find(params[:id]) 
@@ -39,5 +42,15 @@ class UsersController < ApplicationController
   
     def user_params
        params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+    
+    # before アクション
+    
+    # ログイン済ユーザーかどうか確認
+    def logged_in_user
+      unless logged_in?
+        flash[:danger] = "Please log in."
+        redirect_to login_url
+      end
     end
 end
