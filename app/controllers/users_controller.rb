@@ -4,7 +4,8 @@ class UsersController < ApplicationController
   before_action :correct_user, only: [:edit, :update]
   
   def index
-    @users = User.all
+    # params[:page] はwill_paginateによって自動的に生成される
+    @users = User.paginate(page: params[:page])
   end
 
   def show
