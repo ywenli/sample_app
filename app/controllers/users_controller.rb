@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def show
-    @user = User.find(params[:id]) # User.find(1) と同じ
+    # User.find(1) と同じ
+    @user = User.find(params[:id]) 
   end
   
   def new
@@ -22,6 +23,17 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
+  def update
+    @user = User.find(params[:id])
+    # 指定された属性の検証が全て成功した場合@userの更新と保存を続けて同時に行う
+    if @user.update_attributes(user_params)
+      # 更新に成功した場合を扱う
+    else
+      # 更新失敗時はeditアクションに対応したviewが返る
+      render 'edit'
+    end
+  end
+
   private
   
     def user_params
