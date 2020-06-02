@@ -2,7 +2,9 @@
 User.create!(name: "Example User",
   email: "example@railstutorial.org",
   password: "foobar",
-  password_confirmation: "foobar")
+  password_confirmation: "foobar",
+  # 管理者に
+  admin: true)
   
 # 99回繰り返す(timesメソッド)
 99.times do |n|

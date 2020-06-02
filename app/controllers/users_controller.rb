@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 
   # 外部に公開されないメソッド 
   private
-  
+    # 許可された属性リストにadminが含まれいない = admin は編集できない
     def user_params
        params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
