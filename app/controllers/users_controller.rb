@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   # 直前にlogged_in_userメソッドを実行　edit, updateにのみ適用
   before_action :logged_in_user, only: [:index, :edit, :update]
   before_action :correct_user, only: [:edit, :update]
+  before_action :admin_user, only: :destroy
   
   def index
     # params[:page] はwill_paginateによって自動的に生成される
@@ -41,7 +42,13 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
-
+  
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User deleted"
+    redirect_to users_url
+  end
+  
   # 外部に公開されないメソッド 
   private
     # 許可された属性リストにadminが含まれいない = admin は編集できない
@@ -65,5 +72,11 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
       # root_url にリダイレクト　以下の式がfalse の場合　@user とcurrent_userが等しい
       redirect_to(root_url) unless current_user?(@user)
+    end
+    
+    # 管理者かどうか確認
+    def admin_user
+      # current_user.admin? ログイン中のユーザーが管理者でない場合
+      redirect_to(root_url) unless current_user.admin?
     end
 end
