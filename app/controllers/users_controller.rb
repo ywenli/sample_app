@@ -58,6 +58,6 @@ class UsersController < ApplicationController
     def correct_user
       @user = User.find(params[:id])
       # root_url にリダイレクト　以下の式がfalse の場合　@user とcurrent_userが等しい
-      redirect_to(root_url) unless @user == current_user
+      redirect_to(root_url) unless current_user?(@user)
     end
 end
