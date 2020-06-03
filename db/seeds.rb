@@ -3,8 +3,12 @@ User.create!(name: "Example User",
   email: "example@railstutorial.org",
   password: "foobar",
   password_confirmation: "foobar",
-  # 管理者に
-  admin: true)
+  # 管理者にする
+  admin: true,
+  # ユーザーが有効化されている
+  activated: true,
+  # 有効になった日時: サーバーのタイムゾーンに応じたタイムスタンプを返す
+  activated_at: Time.zone.now)
 
 # 99回繰り返す(timesメソッド)
 99.times do |n|
@@ -16,5 +20,7 @@ User.create!(name: "Example User",
   User.create!(name: name,
     email: email,
     password: password,
-    password_confirmation: password)
+    password_confirmation: password,
+    activated: true,
+    activated_at: Time.zone.now)
 end
