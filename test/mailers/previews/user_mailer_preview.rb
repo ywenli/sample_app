@@ -6,7 +6,7 @@ class UserMailerPreview < ActionMailer::Preview
     user = User.first
     # userのactivation_tokenに有効化トークンを代入
     user.activation_token = User.new_token
-    # UserMailerクラスのaccount_activationメソッドを呼び出し（引数にuserを渡す
+    # UserMailerクラスのaccount_activationメソッドを呼び出し（引数にuserを渡す）
     UserMailer.account_activation(user)
   end
 
