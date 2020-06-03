@@ -6,11 +6,18 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user && @user.authenticate(params[:session][:password])
-      # log_in メソッド session[:user_id] にuser.id を代入
-      log_in @user
-      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      # SessionsHelperで定義したredirect_back_orメソッドを呼び出してリダイレクト先を定義
-      redirect_back_or @user
+      if @user.activated?
+        # log_in メソッド session[:user_id] にuser.id を代入
+        log_in @user
+        params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
+        # SessionsHelperで定義したredirect_back_orメソッドを呼び出してリダイレクト先を定義
+        redirect_back_or @user
+      else
+        message = "Account not activated."
+        message += "Check your email for the activation link."
+        flash[:warining] = message
+        redirect_to root_url
+      end
     else
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
