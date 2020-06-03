@@ -6,12 +6,15 @@ class UsersController < ApplicationController
   
   def index
     # params[:page] はwill_paginateによって自動的に生成される
-    @users = User.paginate(page: params[:page])
+    @users = User.where(activated: true).paginate(page: params[:page])
   end
 
   def show
     # User.find(1) と同じ
     @user = User.find(params[:id]) 
+    # trueの場合、ここで処理が終了
+    # @userが有効ではない場合、リダイレクトは実行されない
+    redirect_to root_url and return unless @user.activated?
   end
   
   def new
@@ -21,7 +24,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      UserMailer.account_activation(@user).deliver_now
+      # Userモデルで定義したメソッド(send_activation_email)を呼び出して有効化メールを送信
+      @user.send_activation_email
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
