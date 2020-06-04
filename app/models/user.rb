@@ -1,3 +1,4 @@
+
 class User < ApplicationRecord
   # 仮想の属性 :remember_token, :activation_token, : reset_tokenをUserクラスに定義
   attr_accessor :remember_token, :activation_token, :reset_token
@@ -67,6 +68,11 @@ class User < ApplicationRecord
     UserMailer.password_reset(self).deliver_now
   end
   
+  # パスワード再設定の期限が切れている場合はtrueを返す
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
+    
   private
   
     # メールアドレスをすべて小文字にする
