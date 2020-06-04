@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  # 仮想の属性 :remember_token, activation_tokenをUserクラスに定義
-  attr_accessor :remember_token, :activation_token
+  # 仮想の属性 :remember_token, :activation_token, : reset_tokenをUserクラスに定義
+  attr_accessor :remember_token, :activation_token, :reset_token
   # メソッドの末尾に! を足してemail属性を直接変更
   #before_save { email.downcase! } 
   before_save :downcase_email
@@ -53,6 +53,18 @@ class User < ApplicationRecord
   # 有効化用のメールを送信する
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+  
+  # パスワード再設定の属性を設定する
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_attribute(:reset_digest,  User.digest(reset_token))
+    update_attribute(:reset_sent_at, Time.zone.now)
+  end
+
+  # パスワード再設定のメールを送信する
+  def send_password_reset_email
+    UserMailer.password_reset
   end
   
   private
