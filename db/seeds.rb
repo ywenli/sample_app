@@ -24,3 +24,12 @@ User.create!(name: "Example User",
     activated: true,
     activated_at: Time.zone.now)
 end
+
+users = User.order(:created_at).take(6)
+50.times do
+  # Faker::Loremか文章を5個取り出して代入
+  content = Faker::Lorem.sentence(5)
+  # usersを順番に取り出してブロック内を実行
+  # 取り出した要素をuserに代入　userに紐づいたmaicropostを作成
+  users.each { |user| user.microposts.create!(content: content) }
+end
