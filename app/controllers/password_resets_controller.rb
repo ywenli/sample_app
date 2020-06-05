@@ -3,11 +3,11 @@ class PasswordResetsController < ApplicationController
   before_action :get_user, only: [:edit, :update]
   before_action :valid_user, only: [:edit, :update]
   before_action :check_expiration, only: [:edit, :update]
-  
-  
+
+
   def new
   end
-  
+
   def create
     # (フォームに入力された) email（を小文字にしたやつ）を持ったuserをDBから見つける
     @user = User.find_by(email: params[:password_reset][:email].downcase)
@@ -23,12 +23,12 @@ class PasswordResetsController < ApplicationController
       render 'new'
     end
   end
-  
+
   def edit
   end
-  
+
   def update
-    if params[:user][:password].empty? 
+    if params[:user][:password].empty?
       @user.errors.add(:password, :blank)
       render 'edit'
     elsif @user.update_attributes(user_params)
@@ -41,7 +41,7 @@ class PasswordResetsController < ApplicationController
       render 'edit'
     end
   end
-    
+
   private
     # :userが必須 パスワードとパスワード確認の属性のみ許可
     def user_params
@@ -49,11 +49,11 @@ class PasswordResetsController < ApplicationController
     end
 
     # boeforeフィルタ
-    
+
     def get_user
       @user = User.find_by(email: params[:email])
     end
-    
+
     # 正しいユーザーかどうか確認する
     def valid_user
       # 条件がfalseの場合
@@ -61,7 +61,7 @@ class PasswordResetsController < ApplicationController
         redirect_to root_url
       end
     end
-    
+
     # トークンが期限切れかどうか確認する
     def check_expiration
       if @user.password_reset_expired?
