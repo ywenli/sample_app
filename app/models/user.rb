@@ -1,5 +1,7 @@
 
 class User < ApplicationRecord
+  # UserとそのMicropostはhas_many(1対多)の関係
+  has_many :microposts
   # 仮想の属性 :remember_token, :activation_token, : reset_tokenをUserクラスに定義
   attr_accessor :remember_token, :activation_token, :reset_token
   # メソッドの末尾に! を足してemail属性を直接変更
