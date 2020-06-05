@@ -1,0 +1,11 @@
+<!-- CSSのidにマイクロポストのidを割り振っている-->
+<li id="micropost-<%= micropost.id %>">
+  <!-- gravatarからユーザーの画像を呼び出して表示&ユーザー詳細へリンク-->
+  <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
+  <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
+  <span class="content"><%= micropost.content %></span>
+  <span class="timestamp">
+    <!--どれくらい前かを文字列で返すヘルパーメソッド-->
+    Posted <%= time_ago_in_words(micropost.created_at) %> ago.
+  </span>
+</li>
