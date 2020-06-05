@@ -11,7 +11,9 @@ class UsersController < ApplicationController
 
   def show
     # User.find(1) と同じ
-    @user = User.find(params[:id]) 
+    @user = User.find(params[:id])
+    # @micropostsに @userのmicropostsのページネーションの指定ページ(params[:page]) を代入
+    @microposts = @user.microposts.paginate(page: params[:page])
     # trueの場合、ここで処理が終了
     # @userが有効ではない場合、リダイレクトは実行されない
     redirect_to root_url and return unless @user.activated?
