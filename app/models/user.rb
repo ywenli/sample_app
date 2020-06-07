@@ -3,6 +3,10 @@ class User < ApplicationRecord
   # UserとそのMicropostはhas_many(1対多)の関係
   # （ユーザーが削除されたとき）紐づいているmicropostも削除される
   has_many :microposts, dependent: :destroy
+  # 能動的関係に対して1対多の関連付け
+  has_many :active_relationships, class_name: "Relationship",
+                                  foreign_key: "follower_id",
+                                  dependent: :destroy
   # 仮想の属性 :remember_token, :activation_token, : reset_tokenをUserクラスに定義
   attr_accessor :remember_token, :activation_token, :reset_token
   # メソッドの末尾に! を足してemail属性を直接変更
