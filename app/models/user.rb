@@ -3,14 +3,18 @@ class User < ApplicationRecord
   # UserとそのMicropostはhas_many(1対多)の関係
   # （ユーザーが削除されたとき）紐づいているmicropostも削除される
   has_many :microposts, dependent: :destroy
-  # 能動的関係に対して1対多の関連付け
+  # 能動的関係に対して一対多の関連付け
   has_many :active_relationships, class_name: "Relationship",
                                   foreign_key: "follower_id",
                                   dependent: :destroy
+  # 受動的関係に対して一対多の関連付け
+  has_many :passive_relationships, class_name: "Relationship",
+                                    foreign_key: "followed_id",
+                                    dependet: :destroy
   # relationshipsテーブルのfollowed_idを通して対象のユーザーを探す
   # following配列の元はfollowed idの集合である
-  has_many :following, through: :active_relationships, 
-                        source: :followed
+  has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, throudh: :passive_relationships
   # 仮想の属性 :remember_token, :activation_token, : reset_tokenをUserクラスに定義
   attr_accessor :remember_token, :activation_token, :reset_token
   # メソッドの末尾に! を足してemail属性を直接変更
