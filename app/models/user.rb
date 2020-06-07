@@ -9,12 +9,12 @@ class User < ApplicationRecord
                                   dependent: :destroy
   # 受動的関係に対して一対多の関連付け
   has_many :passive_relationships, class_name: "Relationship",
-                                    foreign_key: "followed_id",
-                                    dependet: :destroy
+                                   foreign_key: "followed_id",
+                                   dependent: :destroy
   # relationshipsテーブルのfollowed_idを通して対象のユーザーを探す
   # following配列の元はfollowed idの集合である
   has_many :following, through: :active_relationships, source: :followed
-  has_many :followers, throudh: :passive_relationships
+  has_many :followers, through: :passive_relationships, source: :follower
   # 仮想の属性 :remember_token, :activation_token, : reset_tokenをUserクラスに定義
   attr_accessor :remember_token, :activation_token, :reset_token
   # メソッドの末尾に! を足してemail属性を直接変更
