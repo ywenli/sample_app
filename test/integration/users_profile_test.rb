@@ -23,5 +23,9 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     @user.microposts.paginate(page: 1).each do |micropost|
       assert_match micropost.content, response.body
     end
+    # ユーザーの能動的関係 = フォローしている数
+    assert_match @user.active_relationships.count.to_s, response.body
+    # ユーザーの受動的関係 = フォローされている
+    assert_match @user.passive_relationships.count.to_s, response.body
   end
 end
