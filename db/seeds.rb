@@ -1,3 +1,4 @@
+# ユーザー
 # テーブル名.create! カラムと持たせたい値
 User.create!(name: "Example User",
   email: "example@railstutorial.org",
@@ -25,6 +26,7 @@ User.create!(name: "Example User",
     activated_at: Time.zone.now)
 end
 
+# マイクロポスト
 users = User.order(:created_at).take(6)
 50.times do
   # Faker::Loremか文章を5個取り出して代入
@@ -33,3 +35,13 @@ users = User.order(:created_at).take(6)
   # 取り出した要素をuserに代入　userに紐づいたmaicropostを作成
   users.each { |user| user.microposts.create!(content: content) }
 end
+
+# リレーションシップ
+users = User.all
+user = users.first
+following = users[2..50]
+followers = users[3..40]
+# 最初のユーザーにユーザー3からユーザー51までをフォローさせる
+following.each { |followed| user.follow(followed) }
+# ユーザー4からユーザー41に最初のユーザーをフォローさせる
+followers.each { |follower| follower.follow(user) }
